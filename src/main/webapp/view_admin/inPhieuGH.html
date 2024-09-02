@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Giao Hàng</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .invoice-container {
+            width: 21cm; /* A4 width */
+            min-height: 29.7cm; /* A4 height */
+            padding: 1cm;
+            background-color: #fff;
+            border: 2px solid #000; /* Bold border for the entire page */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+
+        .logo {
+            width: 100px; /* Adjust width as needed */
+            height: auto;
+        }
+
+        .separator {
+            border-top: 1px solid #000; /* Bold border for separator */
+            margin: 20px 0;
+        }
+
+        .bordered-section {
+            margin-bottom: 20px;
+        }
+
+        .delivery-logo {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .signature-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 200px;
+            height: 100px;
+            text-align: center;
+        }
+
+        .dotted-separator {
+            border-bottom: 1px dotted #000; /* Dotted border for sender and receiver separation */
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5 p-4 invoice-container">
+    <div class="bordered-section">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="mb-0">MS-STORE</h1>
+                <p class="mb-1">Mã Hóa Đơn: 12345</p>
+                <p class="mb-0">Ngày Đặt Đơn: June 18, 2024</p>
+            </div>
+            <div class="col-md-6 text-right">
+                <img src="https://cdn.prod.website-files.com/5fb85f26f126ce08d792d2d9/607cdb2f875a62174a2ac9e3_After_GHN.png" alt="Giao hàng nhanh" class="delivery-logo">
+            </div>
+        </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="bordered-section">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Thông tin Bên Gửi:</h5>
+                <div class="d-flex flex-column">
+                    <p class="mb-0">Người gửi: MS-STORE</p>
+                    <p class="mb-0">Địa chỉ: Tòa nhà FPT Polytechnic, Phố Trịnh Văn Bô, Xuân Phương, Nam Từ Liêm, Hà Nội</p>
+                    <p class="mb-0">Số điện thoại: 0123 456 789</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h5>Thông tin Bên Nhận:</h5>
+                <div class="d-flex flex-column">
+                    <p class="mb-0">Người nhận: Nguyễn Văn A</p>
+                    <p class="mb-0">Địa chỉ: Số 123, Phường ABC, Quận XYZ, Thành phố HCM</p>
+                    <p class="mb-0">Số điện thoại: 0987 654 321</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="bordered-section">
+        <h5>Nội dung đơn hàng</h5>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+            <tr>
+                <th>Tên Sản Phẩm</th>
+                <th>Màu Sắc</th>
+                <th>Kích Thước</th>
+                <th>Số Lượng</th>
+                <th>Đơn Giá</th>
+                <th>Tổng tiền</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Áo thun</td>
+                <td>Đen</td>
+                <td>M</td>
+                <td>2</td>
+                <td>200,000 ₫</td>
+                <td>400,000 ₫</td>
+            </tr>
+            <tr>
+                <td>Quần jean</td>
+                <td>Xanh</td>
+                <td>L</td>
+                <td>1</td>
+                <td>300,000 ₫</td>
+                <td>300,000 ₫</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="bordered-section d-flex justify-content-between align-items-start">
+        <div>
+            <h5 class="mb-0">Tiền thu hộ: <span>200,000 ₫</span></h5>
+        </div>
+        <div class="signature-box">
+            <p class="mb-1">Chữ ký người nhận</p>
+            <p>(Xác nhận hàng nguyên vẹn, không móp, méo)</p>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies (optional) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<!-- html2pdf.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+</body>
+</html>

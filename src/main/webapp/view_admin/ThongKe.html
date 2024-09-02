@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Statistics</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+    <style>
+      .stat-section {
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .stat-section.today {
+        background-color: #8ecae6;
+      }
+      .stat-section.this-week {
+        background-color: #219ebc;
+      }
+      .stat-section.this-month {
+        background-color: #28a745;
+      }
+      .stat-section.this-year {
+        background-color: #ffb703;
+      }
+      .stat-section.custom {
+        background-color: #0981b9; /* Light blue for the custom section */
+      }
+      .stat-section h3 {
+        font-size: 1.25em;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .stat-section h3 i {
+        margin-right: 8px;
+      }
+      .stat-details {
+        display: flex;
+        justify-content: space-around;
+        text-align: center;
+      }
+      .stat-details div {
+        flex: 1;
+        margin: 0 10px;
+      }
+      .stat-details p {
+        margin: 5px 0;
+      }
+      .stat-value {
+        font-size: 1em;
+        font-weight: bold;
+      }
+
+      .stat-value#today-revenue,
+      .stat-value#week-revenue,
+      .stat-value#month-revenue,
+      .stat-value#year-revenue {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+
+      .card-filter {
+        margin-bottom: 20px;
+      }
+      .card-body-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .card-title {
+        font-weight: bold;
+        font-size: 1.25rem;
+      }
+      .card-table {
+        margin-top: 20px;
+      }
+      .chart {
+        height: 300px;
+        margin-top: 20px;
+      }
+
+      .form-control.with-title {
+        width: calc(
+          100% - 8px
+        ); /* Độ rộng ô input trừ đi khoảng cách của tiêu đề */
+        padding-left: 8px; /* Padding bên trái của ô input để tạo khoảng cách cho tiêu đề */
+      }
+
+      /* CSS cho tiêu đề bên trong input */
+      .input-title {
+        position: absolute;
+        top: -10px;
+        left: 8px;
+        padding: 0 4px;
+        background-color: #fff;
+        color: #6c757d;
+        font-size: 12px;
+        pointer-events: none;
+      }
+
+      .form-control.with-title:focus + .input-title {
+        color: #adb5bd;
+      }
+
+      .btn-outline-primary:hover {
+        color: #fff;
+      }
+
+      #wrapper {
+        background-color: #f8f9fc;
+        width: 100%;
+        overflow-x: hidden;
+      }
+
+      #pie-chart {
+        width: 100%;
+        height: 100%;
+        max-height: 300px; /* Adjust height as necessary */
+      }
+
+      .border-card {
+        border: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mt-4" id="wrapper">
+      <div class="row">
+        <div class="col-12" style="padding: 0px 40px 0px 20px" ;>
+          <h3 class="my-4">Thống Kê</h3>
+
+          <!-- Phần đầu thống kê -->
+          <!-- Phần đầu -->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="stat-section today">
+                <h3 class="text-center">
+                  <i class="bi bi-calendar-day"></i>Hôm nay
+                </h3>
+                <p class="stat-value text-center" id="today-revenue">0</p>
+                <div class="stat-details">
+                  <div>
+                    <p>Sản phẩm</p>
+                    <p class="stat-value" id="today-products">0</p>
+                  </div>
+                  <div>
+                    <p>Thành công</p>
+                    <p class="stat-value" id="today-success">0</p>
+                  </div>
+                  <div>
+                    <p>Đơn hủy</p>
+                    <p class="stat-value" id="today-cancel">0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 pr-2">
+              <div class="stat-section this-week">
+                <h3 class="text-center">
+                  <i class="bi bi-calendar-week"></i>Tuần này
+                </h3>
+                <p class="stat-value text-center" id="week-revenue">0</p>
+                <div class="stat-details">
+                  <div>
+                    <p>Sản phẩm</p>
+                    <p class="stat-value" id="week-products">0</p>
+                  </div>
+                  <div>
+                    <p>Thành công</p>
+                    <p class="stat-value" id="week-success">0</p>
+                  </div>
+                  <div>
+                    <p>Đơn hủy</p>
+                    <p class="stat-value" id="week-cancel">0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="stat-section this-month">
+                <h3 class="text-center">
+                  <i class="bi bi-calendar3"></i>Tháng này
+                </h3>
+                <p class="stat-value text-center" id="month-revenue">0</p>
+                <div class="stat-details">
+                  <div>
+                    <p>Sản phẩm</p>
+                    <p class="stat-value" id="month-products">0</p>
+                  </div>
+                  <div>
+                    <p>Thành công</p>
+                    <p class="stat-value" id="month-success">0</p>
+                  </div>
+                  <div>
+                    <p>Đơn hủy</p>
+                    <p class="stat-value" id="month-cancel">0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="stat-section this-year">
+                <h3 class="text-center">
+                  <i class="bi bi-calendar4"></i>Năm này
+                </h3>
+                <p class="stat-value text-center" id="year-revenue">0</p>
+                <div class="stat-details">
+                  <div>
+                    <p>Sản phẩm</p>
+                    <p class="stat-value" id="year-products">0</p>
+                  </div>
+                  <div>
+                    <p>Thành công</p>
+                    <p class="stat-value" id="year-success">0</p>
+                  </div>
+                  <div>
+                    <p>Đơn hủy</p>
+                    <p class="stat-value" id="year-cancel">0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="stat-section custom">
+                <h3 class="text-center">
+                  <i class="bi bi-calendar2-week"></i>Tùy chỉnh
+                </h3>
+                <p class="stat-value text-center" id="custom-revenue">0</p>
+                <div class="stat-details">
+                  <div>
+                    <p>Sản phẩm</p>
+                    <p class="stat-value" id="custom-products">0</p>
+                  </div>
+                  <div>
+                    <p>Thành công</p>
+                    <p class="stat-value" id="custom-success">0</p>
+                  </div>
+                  <div>
+                    <p>Đơn hủy</p>
+                    <p class="stat-value" id="custom-cancel">0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thống kê sản phẩm bán chạy -->
+          <div class="card border-card mt-4">
+            <div class="card-body">
+              <h4 class="card-title">Sản phẩm bán chạy</h4>
+              <div class="card-table">
+                <!-- Table content will be dynamically inserted here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Biểu đồ tròn -->
+          <div class="card border-card mt-4">
+            <div class="card-body">
+              <h4 class="card-title">Tổng quan tình trạng</h4>
+              <div id="pie-chart" class="chart"></div>
+            </div>
+          </div>
+
+          <!-- Lọc dữ liệu -->
+          <div class="card border-card mt-4">
+            <div class="card-body card-filter">
+              <h4 class="card-body-title">Lọc dữ liệu</h4>
+              <form class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                  <label for="start-date" class="sr-only">Từ ngày</label>
+                  <input
+                    type="date"
+                    class="form-control with-title"
+                    id="start-date"
+                    placeholder="Từ ngày"
+                  />
+                  <span class="input-title">Từ ngày</span>
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                  <label for="end-date" class="sr-only">Đến ngày</label>
+                  <input
+                    type="date"
+                    class="form-control with-title"
+                    id="end-date"
+                    placeholder="Đến ngày"
+                  />
+                  <span class="input-title">Đến ngày</span>
+                </div>
+                <button type="submit" class="btn btn-outline-primary mb-2">
+                  Lọc
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var pieChart = echarts.init(document.getElementById('pie-chart'));
+        var option = {
+          title: {
+            text: 'Tổng quan tình trạng',
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left'
+          },
+          series: [
+            {
+              name: 'Tình trạng',
+              type: 'pie',
+              radius: '50%',
+              data: [
+                { value: 335, name: 'Đơn hàng thành công' },
+                { value: 310, name: 'Đơn hàng hủy' },
+                { value: 234, name: 'Đơn hàng khác' }
+              ],
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        };
+        pieChart.setOption(option);
+      });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+   // Hiển thị giao diện quản lý hóa đơn
+    @GetMapping("/hien-thi")
+    public String view(Model model, @RequestParam(value = "page", defaultValue = "0") String pageParam) {
+        // Lấy ra 5 hóa đơn trong 1 Page
+        Pageable pageable = PageRequest.of(Integer.valueOf(pageParam), 5, Sort.by(Sort.Direction.DESC, "ngayTao"));
+        // Lấy ra danh sách hóa đơn có trạng thái là 1(Đã thanh toán)
+        Page<HoaDon> pageHD = _hoaDonRepo.findByTrangThai(1, pageable);
+        Page<HoaDon> pageHDAll = _hoaDonRepo.findAll(pageable);
+        // Chuyển Đổi từ Page<HoaDon> sang list<HoaDonDTO> để trả về view
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        List<HoaDonDTO> listHoaDonDTO = pageHD.stream()
+                .map(hoaDon -> new HoaDonDTO(
+                        hoaDon.getId().toString(),
+                        hoaDon.getMa(),
+                        hoaDon.getIdKhachHang(),
+                        hoaDon.getIdNhanVien(),
+                        hoaDon.getPhuongThucThanhToan(),
+                        hoaDon.getTongTien(),
+                        hoaDon.getLoaiHoaDon(),
+                        hoaDon.getNgayTao() != null ? hoaDon.getNgayTao().format(dateTimeFormatter) : null,
+                        hoaDon.getTrangThai()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("hoaDonPage", listHoaDonDTO);
+        model.addAttribute("pageHD", pageHD);
+        model.addAttribute("currentStatus", status);
+        model.addAttribute("currentLoaiHoaDon", loaiHoaDon);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("startDate", startDateStr);
+        model.addAttribute("endDate", endDateStr);
+//        model.addAttribute("ngayTao", ngayTaoStr);
+        model.addAttribute("pageHDALL", pageHDAll);
+        model.addAttribute("hoaDonPageAll", listHoaDonALLDTO);
+        model.addAttribute("hoaDonPageXacNhan",pageHD.getContent());
+        return "/view/view_tai/hoa_don/bill.jsp";
+    }
+
+
+
